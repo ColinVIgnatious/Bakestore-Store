@@ -1,0 +1,241 @@
+<%- include('../layouts/userheader.ejs') %>
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+      <div class="col-12">
+          <nav class="breadcrumb bg-light mb-30">
+              <a class="breadcrumb-item text-dark" href="/homepage">Home</a>
+              <a class="breadcrumb-item text-dark" href="#">Products</a>
+              <span class="breadcrumb-item active">Shopping Cart</span>
+          </nav>
+      </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Cart Start -->
+<% let totalPriceSum = 0 %>
+<% let priceaftercoupon= 0%> 
+<% if(cart.products.length==0) { %>
+  <div class="container-fluid mt-100">
+    <div class="row px-xl-5">
+      <div class="col-md-12">
+        <div class="card">
+            <div class="card-body cart">
+              <div class="col-sm-12 empty-cart-cls text-center">
+                <img src="https://i.imgur.com/dCdflKN.png" width="100" height="130" class="img-fluid mb-4 mr-3">
+                <h3><strong>Your Cart is Empty!</strong></h3>
+                <h4>Add something to make me happy :)</h4>
+                <a href="/homepage" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue shopping</a>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } else { %>
+<div class="container-fluid">
+  <div class="row px-xl-5">
+      <div class="col-lg-8 table-responsive mb-5">
+          <table class="table table-light table-borderless table-hover text-center mb-0">
+              <thead class="thead-dark">
+                  <tr>
+                      <th>Products</th>
+                      <th>Price(₹)</th>
+                      <th>Quantity</th>
+                      <th>Total(₹)</th>
+                      <th>Remove</th>
+                  </tr>
+              </thead>
+              <tbody class="align-middle">
+                
+                <% cart.products.forEach(function(item) { %>
+                <% let totalPrice = item.product.price * item.quantity; %>
+                <% totalPriceSum += totalPrice; %> 
+                
+                  <tr class="incrementdecrement" data-id="<%= item.product._id %>">
+                  
+                      <td class="align-middle"><img src="/images/uploads/<%= item.product.images %>" alt="" style="width: 50px;"><%= item.product.productname %></td>
+                      <td class="align-middle price"><%= item.product.price %></td>
+                      <td class="align-middle">
+                          <div class="input-group quantity mx-auto" style="width: 100px;">
+                              <div class="input-group-btn">
+                                  <button class="btn btn-sm btn-primary dec-btn" >
+                                  <i class="fa fa-minus"></i>
+                                  </button>
+                              </div>
+                              <span class="inputQuantity form-control  bg-secondary border-0 text-center" data-price="<%= item.product.price %>" data-total="<%= totalPrice %>"><%= item.quantity %></span>
+                              <!-- <span class="fw-bold inputQuantity form-control bg-secondary border-0 text-center"  data-price="<%= item.product.price %>" data-total="<%= totalPrice %>"><%= item.quantity %></span> -->
+                              <!-- <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="1"> -->
+                              <div class="input-group-btn">
+                                  <button class="btn btn-sm btn-primary inc-btn">
+                                      <i class="fa fa-plus"></i>
+                                  </button>
+                              </div>
+                          </div>
+                      </td>
+                      <td class="align-middle total-price"><%= totalPrice %></td>
+                      <td class="align-middle"><a href="/cart/<%= cart._id %>/product/<%= item.product._id %>"><button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></a></td>
+                  </tr>
+                  <% }); %> 
+              </tbody>
+          </table>
+      </div>
+      <div class="col-lg-4">
+          <form class="mb-30" action="">
+              <div class="input-group">
+                  <input type="text" class="form-control border-0 p-4" placeholder="<%= coupon.code %>" style="color: #000;" readonly>
+                
+                  <div class="input-group-append">
+                    <!-- <button class="btn btn-primary" href="/addcoupon">Apply Coupon</button> -->
+                   
+                    <a class="applycoupon btn btn-primary text-center" href="">Apply Coupon</a>
+                    
+                      
+                  </div>
+              </div>
+          </form>
+          <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+          <div class="bg-light p-30 mb-5">
+            
+              <div class="border-bottom pb-2">
+                
+                  <div class="d-flex justify-content-between mb-3">
+                      <h6>Subtotal:</h6>
+                      <h6>₹</h6>
+                      <h6 class="total-price-sum"><%= totalPriceSum %></h6>
+                  </div>
+                  <span id="coupon" data-coupon="<%= coupon.couponId %>"></span>
+                  <div class="d-flex justify-content-between">
+                      <h6 class="font-weight-medium" >Coupon Discount:</h6>
+                      <h6>₹</h6>
+                      <% if (coupon && coupon.discountAmount !== undefined) { %>
+                          <h6 class="font-weight-medium coupon-discount"><%= coupon.discountAmount %></h6>
+                      <% } else { %>
+                          <% coupon.discountAmount=0 %>
+                          <h6 class="font-weight-medium coupon-discount"><%= coupon.discountAmount %></h6>
+                      <% } %>
+                  </div>
+                </div>
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                      <h5>Total:</h5>
+                      <h5>₹</h5>
+                      <% if (coupon && coupon.discountAmount !== undefined) { %>
+                        <% priceaftercoupon= totalPriceSum - coupon.discountAmount; %>
+                      <% } else { %>
+                        <% coupon.discountAmount=0 %>
+                        <% priceaftercoupon= totalPriceSum %>
+                      <% } %>
+                      
+                      <h5 class="price-after-coupon"><%= priceaftercoupon %></h5>   
+                    </div>
+                    <!-- <a href="/checkout/<%= coupon.couponId %>"><button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button></a> -->
+                    <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" onclick="proceedToCheckout()">Proceed To Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <% } %>
+                       
+                        
+                        
+
+
+
+  
+  <script>
+    
+  // Function to handle the click on the "Proceed To Checkout" button
+  function proceedToCheckout() {
+    const couponId = document.querySelector("#coupon").getAttribute("data-coupon");
+    
+    if (couponId && couponId !== "") {
+      // If a coupon is selected, go to checkout with the coupon ID
+      window.location.href = `/checkout/${couponId}`;
+    } else {
+      // If no coupon is selected, go to checkout without a coupon ID
+      window.location.href = "/checkout";
+    }
+  }
+
+</script>
+  <%- include('../layouts/footer.ejs') %>
+  <script>
+    
+    //Quantity
+    const displayCount = document.querySelectorAll(".incrementdecrement");
+    const totalpricesum = document.querySelector('.total-price-sum');
+    const priceaftercoupon = document.querySelector('.price-after-coupon');
+    
+    
+    displayCount.forEach(item=>{
+    const decBtn = item.querySelector(".dec-btn")
+    const incBtn = item.querySelector(".inc-btn")
+    const inputQuantity = item.querySelector(".inputQuantity")
+    const price = item.querySelector('.price')
+    const totalprice = item.querySelector('.total-price')
+    const productId = item.getAttribute("data-id")
+    
+
+    incBtn.addEventListener("click", () => {
+      
+      let qty=Number(inputQuantity.textContent)
+
+      if (qty < 10) {
+        inputQuantity.textContent=++qty
+        totalprice.textContent=price.textContent*qty
+        updatetotalpricesum()
+        updateQuantity(productId,qty)
+      }
+        
+    })
+
+    decBtn.addEventListener("click", () => {
+      let qty=inputQuantity.textContent 
+      if (qty > 1) {inputQuantity.textContent=--qty
+      totalprice.textContent=price.textContent*qty
+      updatetotalpricesum()
+      updateQuantity(productId,qty)
+     
+    }
+    })
+
+
+    })
+     
+    function updatetotalpricesum(){
+      let sum=0
+      displayCount.forEach(item=>{
+      const totalprice=item.querySelector('.total-price')
+      sum+=Number(totalprice.textContent)
+      })
+      totalpricesum.textContent=sum
+      const coupondiscount = document.querySelector('.coupon-discount')
+      priceaftercoupon.textContent=Number(totalpricesum.textContent)-Number(coupondiscount.textContent)
+      
+    }
+  function updateQuantity(productId,quantity){
+    fetch("/updatecart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId,quantity }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+             
+      })
+      .catch((error) => console.error(error));
+  }
+
+  const applycoupon=document.querySelector('.applycoupon')
+  applycoupon.addEventListener('click',e =>{
+    e.preventDefault();
+    window.location.href=`/addcoupon?total=${totalpricesum.textContent}`
+  })
+
+ </script>
+
+

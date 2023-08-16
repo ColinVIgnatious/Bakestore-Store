@@ -1,0 +1,197 @@
+<%- include('../layouts/adminheader.ejs') %>
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div
+          class="card shadow-2-strong card-registration"
+          style="border-radius: 15px"
+        >
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add Coupons</h3>
+            <form id="couponForm" action="/admin/addcoupon" method="POST">
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label" for="code">Enter PromoCode</label>
+                    <input
+                      type="text"
+                      id="code"
+                      class="form-control form-control-lg"
+                      name="code"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label" for="discountType"
+                      >Choose Discount Type</label
+                    >
+                    <div class="col-12">
+                      <select class="select form-control-lg" name="discountType">
+                        
+                        <option value="Percentage"  >Percentage Amount</option>
+                        <option value="Fixed"  selected >Fixed Amount</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center"></div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="description"
+                      >Code Description</label
+                    >
+                    <input
+                      type="text"
+                      id="description"
+                      class="form-control form-control-lg"
+                      name="description"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="discountAmount"
+                      >Discount Amount</label
+                    >
+                    <input
+                      type="number"
+                      id="discountAmount"
+                      class="form-control form-control-lg"
+                      name="discountAmount"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="minimumAmount"
+                      >Minimum Amount</label
+                    >
+                    <input
+                      type="number"
+                      id="minimumAmount"
+                      name="minimumAmount"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="maxRedemptions"
+                      >Maximum Redemptions</label
+                    >
+                    <input
+                      type="number"
+                      id="maxRedemptions"
+                      name="maxRedemptions"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="expirationDate"
+                      >Expiration Date</label
+                    >
+                    <input
+                      type="datetime-local"
+                      id="expirationDate"
+                      name="expirationDate"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2">
+                <button class="btn btn-primary btn-lg" type="submit">
+                  ADD COUPON
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../layouts/adminfooter.ejs') %>
+<script>
+  const couponForm = document.getElementById('couponForm');
+  const codeInput = document.getElementById('code');
+  const discountTypeSelect = document.querySelector('select[name="discountType"]');
+  const descriptionInput = document.getElementById('description');
+  const discountAmountInput = document.getElementById('discountAmount');
+  const minimumAmountInput = document.getElementById('minimumAmount');
+  const maxRedemptionsInput = document.getElementById('maxRedemptions');
+  const expirationDateInput = document.getElementById('expirationDate');
+  const submitButton = document.querySelector('button[type="submit"]');
+
+  couponForm.addEventListener('submit', function (event) {
+      let isValid = true;
+
+      // Reset previous error messages
+      codeInput.classList.remove('is-invalid');
+      discountTypeSelect.classList.remove('is-invalid');
+      descriptionInput.classList.remove('is-invalid');
+      discountAmountInput.classList.remove('is-invalid');
+      minimumAmountInput.classList.remove('is-invalid');
+      maxRedemptionsInput.classList.remove('is-invalid');
+      expirationDateInput.classList.remove('is-invalid');
+
+      // Perform validation for each field
+      if (codeInput.value.trim() === '') {
+          isValid = false;
+          codeInput.classList.add('is-invalid');
+      }
+
+      if (discountTypeSelect.value === '') {
+          isValid = false;
+          discountTypeSelect.classList.add('is-invalid');
+      }
+
+      if (descriptionInput.value.trim() === '') {
+          isValid = false;
+          descriptionInput.classList.add('is-invalid');
+      }
+
+      if (isNaN(discountAmountInput.value) || parseFloat(discountAmountInput.value) <= 0) {
+          isValid = false;
+          discountAmountInput.classList.add('is-invalid');
+      }
+
+      if (isNaN(minimumAmountInput.value) || parseFloat(minimumAmountInput.value) < 0) {
+          isValid = false;
+          minimumAmountInput.classList.add('is-invalid');
+      }
+
+      if (isNaN(maxRedemptionsInput.value) || parseInt(maxRedemptionsInput.value) < 0) {
+          isValid = false;
+          maxRedemptionsInput.classList.add('is-invalid');
+      }
+
+      if (expirationDateInput.value.trim() === '') {
+          isValid = false;
+          expirationDateInput.classList.add('is-invalid');
+      }
+
+      if (!isValid) {
+          event.preventDefault(); // Prevent form submission if validation fails
+      }
+  });
+</script>
+
+

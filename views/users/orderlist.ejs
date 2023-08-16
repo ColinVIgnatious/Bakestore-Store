@@ -1,0 +1,135 @@
+<%- include('../layouts/userheader.ejs') %>
+<div class="row">
+  <div class="col-75">
+    <div class="container">
+      <div class="row1">
+        <div class="col-50">
+          <h3>Orderlist</h3>
+          <% order.forEach(function(item) { %>
+            <div class="border border-2 p-3 mb-3">
+              <a href="/orderdetails/<%= item._id %>"><h4 class="d-flex"><strong>OrderId:<%= item._id %></strong></h4></a>
+              
+              <span>
+                <i class="material-icons md-calendar_today"></i> <b><%= new Date(item.createdAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })%>
+                </b>
+              </span> <br>
+               
+              <p>Amount:<%= item.totalAmount %></p>
+              <span class="badge custom-danger-badge alert-success text-success text-capitalize"> <%= item.orderStatus %></span>
+              <table class="table mt-20">
+              <tbody>
+                <% item.items.forEach(function(product) { %>
+                  <tr>
+                    <td><img src="/images/uploads/<%= product.productId.images[0] %>" class="img-sm img-thumbnail" alt="Item" width="50px"></td>
+                    <td><%= product.productId.productname %></td>
+                    <td><%= product.quantity %></td>
+                    <td><%= product.price %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+              </table>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../layouts/footer.ejs') %>
+<style>
+.coupon-container {
+    display: none; /* Hidden by default */
+  }
+  
+  .row1 {
+display: -ms-flexbox; /* IE10 */
+display: flex;
+-ms-flex-wrap: wrap; /* IE10 */
+flex-wrap: wrap;
+margin: 0 -16px;
+}
+
+.col-25 {
+-ms-flex: 25%; /* IE10 */
+flex: 25%;
+}
+
+.col-50 {
+-ms-flex: 50%; /* IE10 */
+flex: 50%;
+}
+
+.col-75 {
+-ms-flex: 75%; /* IE10 */
+flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+padding: 0 16px;
+}
+
+.container1 {
+background-color: #f2f2f2;
+padding: 5px 20px 15px 20px;
+border: 1px solid lightgrey;
+border-radius: 3px;
+}
+
+input[type=text] {
+width: 100%;
+margin-bottom: 20px;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 3px;
+}
+
+label {
+margin-bottom: 10px;
+display: block;
+}
+
+.icon-container {
+margin-bottom: 20px;
+padding: 7px 0;
+font-size: 24px;
+}
+
+.btn1,.btncoupon,.btnorder {
+background-color: #04AA6D;
+color: white;
+padding: 12px;
+margin: 10px 0;
+border: none;
+width: 100%;
+border-radius: 3px;
+cursor: pointer;
+font-size: 17px;
+}
+
+.btn1:hover {
+background-color: #45a049;
+}
+
+span.price,span.code,span.discountAmount {
+float: right;
+color: grey;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+@media (max-width: 800px) {
+.row1 {
+  flex-direction: column-reverse;
+}
+.col-25 {
+  margin-bottom: 20px;
+}
+} 
+</style>
+              
+              
+        
+                    
+                    
+                

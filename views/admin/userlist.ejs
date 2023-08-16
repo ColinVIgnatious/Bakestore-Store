@@ -1,0 +1,141 @@
+<%- include('../layouts/adminheader.ejs') %>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Users List</h2>
+            <!-- <p>Lorem ipsum dolor sit amet.</p> -->
+        </div>
+        <div>
+            <input type="text" placeholder="Search order ID" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Show 20</option>
+                        <option>Show 30</option>
+                        <option>Show 40</option>
+                    </select>
+                </div>
+            </div>
+        </header> 
+        <!-- card-header end -->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th>#ID</th> -->
+                            <th scope="col">Firstname</th>
+                            <th scope="col">Lastname</th>
+                            <th scope="col">Phonenumber</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Block/Unblock User</th>
+                            <!-- <th scope="col" class="text-end"> Action </th> -->
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <tbody>
+                            <% data.forEach(function(item) { %>
+                              <tr>
+                                <td><%= item.firstname %></td>
+                                <td><%= item.lastname %></td>
+                                <td><%= item.phonenumber %></td>
+                                <td><%= item.email %></td>
+                        
+                                <td>
+                                    
+                                    <% if (item.isActive) { %>
+                                        <button class="btn btn-md rounded font-sm" data-id="<%= item._id%>" style="min-width:100px; padding: 5px 10px; font-size: 12px;">Block User</button>
+                                      <% } else { %>
+                                        <button class="btn btn-md rounded font-sm" data-id="<%= item._id%>" style="min-width:100px; padding: 5px 10px; font-size: 12px;">Unblock User</button>
+                                      <% } %>
+                                      
+                                    
+                                  </td>
+                                  
+                              </tr>
+                            <% }); %>
+                          </tbody>
+                        <!-- <tr>
+                            <td>0901</td>
+                            <td><b>Marvin McKinney</b></td>
+                            <td><template class="__cf_email__" data-cfemail="aec3cfdcd8c7c0eecbd6cfc3dec2cb80cdc1c3">[email&#160;protected]</template></td>
+                            <td>$9.00</td>
+                            <td><span class="badge rounded-pill alert-warning">Pending</span></td>
+                            <td>03.12.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                <div class="dropdown">
+                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">View detail</a>
+                                        <a class="dropdown-item" href="#">Edit info</a>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div> -->
+                                <!-- dropdown //end -->
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div> 
+            <!-- table-responsive //end -->
+        </div>
+         <!-- card-body end// -->
+    </div>
+     <!-- card end// -->
+    <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<%- include('../layouts/adminfooter.ejs') %>
+<script>
+    const button = document.querySelectorAll(".btn")
+    button.forEach(item=>{
+        item.addEventListener("click",()=>{
+            const id=item.getAttribute("data-id")
+            fetch("/admin/blockunblock", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id : id }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status) 
+            {
+                if(item.innerHTML=="Block User") item.innerHTML="Unblock User"
+                else item.innerHTML="Block User"
+            }       
+      })
+      .catch((error) => console.error(error));
+  }); 
+        })
+
+</script>

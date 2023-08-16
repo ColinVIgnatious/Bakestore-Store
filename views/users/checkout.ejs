@@ -1,0 +1,575 @@
+<%- include('../layouts/userheader.ejs') %>
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+      <div class="col-12">
+          <nav class="breadcrumb bg-light mb-30">
+              <a class="breadcrumb-item text-dark" href="#">Home</a>
+              <a class="breadcrumb-item text-dark" href="/shoppingcart">Cart</a>
+              
+              <span class="breadcrumb-item active">Checkout</span>
+          </nav>
+      </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+
+<!-- Checkout Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+      <div class="col-lg-8">
+          <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Select the Shipping Address</span></h5>
+          <div class="bg-light p-30 mb-5">
+              <div class="row">
+                <div class="border border-2 p-3">
+                  <label><input type="radio" checked id="defaultaddress" name="defaultaddress" value="defaultaddress" data-address="<%= user.address[0]._id %>">
+                  <strong><%= user.firstname %> <%= user.lastname %> &nbsp;&nbsp;&nbsp;  <%= user.phonenumber %> </strong></label>
+                  <p><%= user.address[0].address %>,<%= user.address[0].city %>,<%= user.address[0].state %>,<%= user.address[0].pincode %></p>
+              </div>
+              <% for(let i=1;i<user.address.length;i++) { %>
+          <div class="border border-2 p-3">
+              <%const item=user.address[i]%>
+
+              <label><input type="radio" id="defaultaddress" name="defaultaddress" value="defaultaddress" data-address="<%= item._id %>">
+              <strong><%= user.firstname %> <%= user.lastname %> &nbsp;&nbsp;&nbsp;  <%= user.phonenumber %> </strong></label>
+              <p><%= item.address %>,<%= item.city %>,<%= item.state %>,<%= item.pincode %></p>
+          </div>
+              <% }; %>
+                
+                
+                
+                  <!-- <div class="col-md-6 form-group">
+                      <label>First Name</label>
+                      <input class="form-control" type="text" placeholder="John">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>Last Name</label>
+                      <input class="form-control" type="text" placeholder="Doe">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>E-mail</label>
+                      <input class="form-control" type="text" placeholder="example@email.com">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>Mobile No</label>
+                      <input class="form-control" type="text" placeholder="+123 456 789">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>Address Line 1</label>
+                      <input class="form-control" type="text" placeholder="123 Street">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>Address Line 2</label>
+                      <input class="form-control" type="text" placeholder="123 Street">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>Country</label>
+                      <select class="custom-select">
+                          <option selected>United States</option>
+                          <option>Afghanistan</option>
+                          <option>Albania</option>
+                          <option>Algeria</option>
+                      </select>
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>City</label>
+                      <input class="form-control" type="text" placeholder="New York">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>State</label>
+                      <input class="form-control" type="text" placeholder="New York">
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>ZIP Code</label>
+                      <input class="form-control" type="text" placeholder="123">
+                  </div>
+                  <div class="col-md-12 form-group">
+                      <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="newaccount">
+                          <label class="custom-control-label" for="newaccount">Create an account</label>
+                      </div>
+                  </div>-->
+                  <div class="col-md-12">
+                      <div class="custom-control custom-checkbox mt-3">
+                          <input type="checkbox" class="custom-control-input" id="shipto">
+                          <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
+                      </div>
+                  </div> 
+              </div>
+          </div>
+          <div class="collapse mb-5" id="shipping-address">
+              <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Add Alternate Shipping Address</span></h5>
+              <div class="bg-light p-30">
+                
+                
+                  <div class="row">
+                    <div class="col-md-8">
+                        
+                      <div class="mt-4 mb-4">
+          
+                         
+          
+                          <form action="/addalternateaddress" method="POST" id="addressform">
+                              <div class="row mt-3">
+                                  
+                                  <div class="col-md-6">
+          
+                                      <div class="inputbox mt-3 mr-2"> <input type="text" name="address" class="form-control" required="required" placeholder="Address"> </div>
+                                  
+                                  </div>
+          
+          
+                                  <div class="col-md-6">
+          
+                                      <div class="inputbox mt-3 mr-2"> <input type="text" name="city" class="form-control" required="required" placeholder="City"> </div>
+                                  
+                                  </div>
+          
+                              </div>
+          
+                             <div class="row mt-2">
+          
+                                  <div class="col-md-6">
+          
+                                      <div class="inputbox mt-3 mr-2"> <input type="text" name="state" class="form-control" required="required" placeholder="State"> </div>
+                                  
+                                  </div>
+          
+                                  <div class="col-md-6">
+          
+                                      <div class="inputbox mt-3 mr-2"> <input type="text" name="pincode" class="form-control" required="required" placeholder="Pincode"> </div>
+                                  
+                                  </div>   
+          
+                              </div>
+                              <a href=""><button class="btn btn-primary font-weight-bold px-3">ADD ADDRESS</button></a>
+                          </form>
+                      </div>
+          
+                  </div>
+
+                       <!--<div class="col-md-6 form-group">
+                          <label>First Name</label>
+                          <input class="form-control" type="text" placeholder="John">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>Last Name</label>
+                          <input class="form-control" type="text" placeholder="Doe">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>E-mail</label>
+                          <input class="form-control" type="text" placeholder="example@email.com">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>Mobile No</label>
+                          <input class="form-control" type="text" placeholder="+123 456 789">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>Address Line 1</label>
+                          <input class="form-control" type="text" placeholder="123 Street">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>Address Line 2</label>
+                          <input class="form-control" type="text" placeholder="123 Street">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>Country</label>
+                          <select class="custom-select">
+                              <option selected>United States</option>
+                              <option>Afghanistan</option>
+                              <option>Albania</option>
+                              <option>Algeria</option>
+                          </select>
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>City</label>
+                          <input class="form-control" type="text" placeholder="New York">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>State</label>
+                          <input class="form-control" type="text" placeholder="New York">
+                      </div>
+                      <div class="col-md-6 form-group">
+                          <label>ZIP Code</label>
+                          <input class="form-control" type="text" placeholder="123">
+                      </div>-->
+                  </div> 
+              </div>
+          </div>
+      </div>
+      
+
+      <div class="col-lg-4">
+          <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
+          <div class="bg-light p-30 mb-5">
+              <div class="border-bottom">
+               
+                  <h6 class="mb-3">Products</h6>
+                  <% let totalPriceSum = 0 %>
+                <% let priceaftercoupon= 0%> 
+                <% cart.products.forEach(function(item) { %>
+                <% let totalPrice = item.product.price * item.quantity; %>
+                <% totalPriceSum += totalPrice; %> 
+                  <div class="d-flex justify-content-between">
+                      <p><%= item.product.productname %></p>
+                      <p><span>₹</span><%=item.product.price * item.quantity %></p>
+                  </div>
+                  <% }); %>
+                  
+                  
+              </div>
+              <div class="border-bottom pt-3 pb-2">
+                
+                <div class="d-flex justify-content-between mb-3">
+                  <h6>Subtotal:</h6>
+                  <h6>₹</h6>
+                  <h6 class="total-price-sum"><%= totalPriceSum %></h6>
+              </div>
+              
+              <% if (coupon) { %>
+                <span id="coupon" data-coupon="<%= coupon._id %>"></span>
+                  <% if (coupon.discountAmount !== undefined) { %>
+                      <div class="d-flex justify-content-between">
+                          <h6 class="font-weight-medium">Coupon Discount:</h6>
+                          <h6>₹</h6>
+                          
+                          <h6 class="font-weight-medium coupon-discount"><%= coupon.discountAmount %></h6>
+                      </div>
+                  <% } else { %>
+                      <% coupon.discountAmount = 0 %>
+                      <div class="d-flex justify-content-between">
+                          <h6 class="font-weight-medium">Coupon Discount:</h6>
+                          <h6>₹</h6>
+                          <h6 class="font-weight-medium coupon-discount"><%= coupon.discountAmount %></h6>
+                      </div>
+                  <% } %>
+              <% } else { %>
+                  <% coupon = { discountAmount: 0 } %>
+                  <div class="d-flex justify-content-between">
+                      <h6 class="font-weight-medium">Coupon Discount:</h6>
+                      <h6>₹</h6>
+                      <h6 class="font-weight-medium coupon-discount"><%= coupon.discountAmount %></h6>
+                  </div>
+              <% } %>
+              <div class="pt-2">
+                  <div class="d-flex justify-content-between mt-2">
+                      <h5>Total</h5>
+                      <h5>₹</h5>
+                      <h5 class="price-after-coupon"><%= totalPriceSum - coupon.discountAmount %></h5>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div class="mb-5">
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
+            <div class="bg-light p-30">
+              
+              <label><input type="radio" data-id="cashondelivery"  name="paymentoptions" value="cashondelivery"> Cash On Delivery (COD)</label><br>
+      <label><input type="radio" data-id="onlinepayment"  name="paymentoptions" value="onlinepayment"> Online Payment</label><br>
+              
+              
+
+        
+                  <!-- <div class="form-group">
+                      <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" name="payment" id="paypal">
+                          <label class="custom-control-label" for="paypal">Paypal</label>
+                      </div>
+                  </div> -->
+                  <!-- <div class="form-group">
+                      <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+                          <label class="custom-control-label" for="directcheck">Direct Check</label>
+                      </div>
+                  </div> -->
+                  <!-- <div class="form-group mb-4">
+                      <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                          <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
+                      </div>
+                  </div> -->
+                  <button class="btn btn-block btn-primary font-weight-bold py-3 btnorder">Place Order</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Checkout End -->
+<!-- <div class="row">
+    <div class="col-75">
+      <div class="container">
+        
+  
+          <div class="row1">
+            <div class="col-50">
+                
+                
+              <h3>Select the Delivery Address</h3>
+              <div class="border border-2 p-3">
+                <label><input type="radio" checked id="defaultaddress" name="defaultaddress" value="defaultaddress" data-address="<%= user.address[0]._id %>">
+                <strong><%= user.firstname %> <%= user.lastname %> &nbsp;&nbsp;&nbsp;  <%= user.phonenumber %> </strong></label>
+                <p><%= user.address[0].address %>,<%= user.address[0].city %>,<%= user.address[0].state %>,<%= user.address[0].pincode %></p>
+            </div>
+              
+              
+                <% for(let i=1;i<user.address.length;i++) { %>
+            <div class="border border-2 p-3">
+                <%const item=user.address[i]%>
+
+                <label><input type="radio" id="defaultaddress" name="defaultaddress" value="defaultaddress" data-address="<%= item._id %>">
+                <strong><%= user.firstname %> <%= user.lastname %> &nbsp;&nbsp;&nbsp;  <%= user.phonenumber %> </strong></label>
+                <p><%= item.address %>,<%= item.city %>,<%= item.state %>,<%= item.pincode %></p>
+            </div>
+                <% }; %> -->
+              
+              <!-- <h3>Add Alternate Delivery Address</h3>
+                <div class="border border-2 p-3">
+                    <div class="row">
+
+                        <div class="col-md-8">
+                        
+                            <div class="mt-4 mb-4">
+                
+                                <h6 class="text-uppercase">Add Address</h6>
+                
+                                <form action="/addalternateaddress" method="POST" id="addressform">
+                                    <div class="row mt-3">
+                                        
+                                        <div class="col-md-6">
+                
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="address" class="form-control" required="required" placeholder="Address"> </div>
+                                        
+                                        </div>
+                
+                
+                                        <div class="col-md-6">
+                
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="city" class="form-control" required="required" placeholder="City"> </div>
+                                        
+                                        </div>
+                
+                                    </div>
+                
+                                   <div class="row mt-2">
+                
+                                        <div class="col-md-6">
+                
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="state" class="form-control" required="required" placeholder="State"> </div>
+                                        
+                                        </div>
+                
+                                        <div class="col-md-6">
+                
+                                            <div class="inputbox mt-3 mr-2"> <input type="text" name="pincode" class="form-control" required="required" placeholder="Pincode"> </div>
+                                        
+                                        </div>   
+                
+                                    </div>
+                                    <a href=""><button class="btn btn-success px-3">ADD ALTERNATE ADDRESS</button></a>
+                                </form>
+                            </div>
+                
+                        </div>
+                
+                    </div> -->
+                
+              
+                    <!-- <label for="address"><i class="fa fa-address-card-o"></i> Address</label>
+                    <input type="text" id="address" name="address" placeholder="542 W. 15th Street">
+                    <label for="city"><i class="fa fa-institution"></i> City</label>
+                    <input type="text" id="city" name="city" placeholder="New York">
+  
+                    <div class="row1">
+                        <div class="col-50">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" placeholder="NY">
+                        </div>
+                        <div class="col-50">
+                            label for="pincode">Pincode</label>
+                            <input type="text" id="pincode" name="pincode" placeholder="10001">
+                        </div>
+                    </div> -->
+                <!-- </div>
+           
+        </div> -->
+  
+             <!-- <div class="col-50"> -->
+              <!-- <h3>Payment</h3>
+              <label for="fname">Accepted Cards</label>
+              <div class="icon-container">
+                <i class="fa fa-cc-visa" style="color:navy;"></i>
+                <i class="fa fa-cc-amex" style="color:blue;"></i>
+                <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                <i class="fa fa-cc-discover" style="color:orange;"></i>
+              </div> -->
+              <!-- <label for="cname">Name on Card</label>
+              <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+              <label for="ccnum">Credit card number</label>
+              <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+              <label for="expmonth">Exp Month</label>
+              <input type="text" id="expmonth" name="expmonth" placeholder="September"> -->
+  
+              <!-- <div class="row">
+                <div class="col-50">
+                  <label for="expyear">Exp Year</label>
+                  <input type="text" id="expyear" name="expyear" placeholder="2018">
+                </div>
+                <div class="col-50">
+                  <label for="cvv">CVV</label>
+                  <input type="text" id="cvv" name="cvv" placeholder="352">
+                </div>
+              </div> -->
+            <!-- </div> -->
+  
+          <!-- </div>  -->
+         
+          
+        <!-- </form> -->
+      <!-- </div>
+    </div> -->
+   
+   
+<%- include('../layouts/footer.ejs') %>
+<script>
+     const order = document.querySelector('.btnorder');
+
+     
+      order.addEventListener('click', function() {
+        console.log("clicked")
+        const address = document.querySelector('input[name="defaultaddress"]:checked').getAttribute('data-address')
+        const coupon = document.querySelector('#coupon')
+        const paymentType = document.querySelector('input[name="paymentoptions"]:checked').value
+
+        const orderData = {
+          address,
+          paymentType
+          
+        };
+        if(coupon){
+            orderData.coupon=coupon.getAttribute('data-coupon')
+        }
+        
+        console.log(orderData)
+        fetch("/checkoutpost", {
+        method: "POST",     
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(orderData),
+  })
+  .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location = data.url
+                } else {
+                    Toastify({
+            text: data.message,
+            duration: 3000,
+            gravity: "bottom", 
+            position: "center",
+            style: {
+    background: "#FFC300",
+  }, 
+            }).showToast();
+                }
+            })
+            .catch(error => {
+                showToast("Something went wrong")
+            })
+
+    });
+
+
+
+  </script>
+<style>
+    
+    .coupon-container {
+      display: none; /* Hidden by default */
+    }
+    
+    .row1 {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+}
+
+.col-25 {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+}
+
+.col-50 {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+}
+
+.container1 {
+  background-color: #f2f2f2;
+  padding: 5px 20px 15px 20px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+}
+
+.btn1,.btncoupon,.btnorder {
+  background-color: #FFD333;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.btn1:hover {
+  background-color: #FFD333;
+}
+
+span.price,span.code,span.discountAmount {
+  float: right;
+  color: grey;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+@media (max-width: 800px) {
+  .row1 {
+    flex-direction: column-reverse;
+  }
+  .col-25 {
+    margin-bottom: 20px;
+  }
+}
+</style>

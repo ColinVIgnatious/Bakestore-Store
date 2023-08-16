@@ -1,0 +1,38 @@
+const express = require("express");
+const user_route = express();
+const auth = require('../middlewares/auth');
+const setcache = require('../middlewares/cacheControlMiddleware');
+const userController = require("../controllers/userController");
+
+user_route.get('/',setcache.setCacheControl,auth.checkSession,userController.homepage);
+user_route.get('/signup',setcache.setCacheControl,userController.signup);
+user_route.post('/sendotp',setcache.setCacheControl,userController.sendotp);
+user_route.post('/verifyotp',setcache.setCacheControl,userController.signupin);
+user_route.get('/forgotpassword',setcache.setCacheControl,userController.forgotpassword);
+user_route.post('/forgotpassword',setcache.setCacheControl,userController.forgotpasswordpost);
+user_route.get('/homepage',setcache.setCacheControl,auth.checkSession,userController.signin);
+user_route.get('/products/category/:categoryId',setcache.setCacheControl,auth.checkSession,userController.getAllListedProducts);
+user_route.get('/login',setcache.setCacheControl,userController.login);
+user_route.post('/login',setcache.setCacheControl,userController.loginpage);
+user_route.get('/productdetails/:id',setcache.setCacheControl,auth.checkSession,userController.productdetails);
+user_route.post('/addtocart',setcache.setCacheControl,auth.checkSession,userController.addtocartpost);
+user_route.get('/cart/:cartId/product/:productId',setcache.setCacheControl,auth.checkSession,userController.removefromcart);
+user_route.get('/shoppingcart',setcache.setCacheControl,auth.checkSession,userController.shoppingcart);
+user_route.post('/updatecart',setcache.setCacheControl,auth.checkSession,userController.updatecartpost);
+user_route.get('/userprofile',setcache.setCacheControl,auth.checkSession,userController.userprofile);
+user_route.post('/userprofile',setcache.setCacheControl,auth.checkSession,userController.userprofilepost);
+user_route.get('/addaddress',setcache.setCacheControl,auth.checkSession,userController.addaddress);
+user_route.post('/addaddress',setcache.setCacheControl,auth.checkSession,userController.addaddresspost);
+user_route.post('/addalternateaddress',setcache.setCacheControl,auth.checkSession,userController.addalternateaddress);
+user_route.get('/addcoupon',setcache.setCacheControl,auth.checkSession,userController.addcoupon);
+user_route.post('/addcoupon',setcache.setCacheControl,auth.checkSession,userController.addcouponpost);
+user_route.get('/checkout/:id?',setcache.setCacheControl,auth.checkSession,userController.checkout);
+user_route.post('/checkoutpost',setcache.setCacheControl,auth.checkSession,userController.checkoutpost);
+user_route.get('/orders/payment',setcache.setCacheControl,auth.checkSession,userController.payment);
+user_route.post('/orders/check-payment',setcache.setCacheControl,auth.checkSession,userController.checkPayment);
+user_route.get('/orderdetails/:id',setcache.setCacheControl,auth.checkSession,userController.orderdetails);
+user_route.get('/orderdetailspost/:id',setcache.setCacheControl,auth.checkSession,userController.editorderdetailspost);
+user_route.get('/orderlist',setcache.setCacheControl,auth.checkSession,userController.orderlist);
+user_route.get('/logout',setcache.setCacheControl,auth.checkSession,userController.logout);
+
+module.exports = user_route;

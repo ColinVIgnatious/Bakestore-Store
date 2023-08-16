@@ -1,0 +1,4 @@
+node_modules
+.env
+sales_report.pdf
+sales_report.xlsx

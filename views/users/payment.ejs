@@ -1,0 +1,110 @@
+<%- include('../layouts/userheader.ejs') %>
+<div class="position-absolute d-flex flex-column justify-content-center align-items-center gap-3"
+    style="inset: 0;">
+    <div id="lottie-container" style="width: 200px; height: 200px;"></div>
+    <p class="pt-2 fw-bold" id="payment-status">Processing your payment...</p>
+    
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"
+    integrity="sha512-jEnuDt6jfecCjthQAJ+ed0MTVA++5ZKmlUcmDGBv2vUI/REn6FuIdixLNnQT+vKusE2hhTk2is3cFvv5wA+Sgg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const status = document.querySelector('#payment-status');
+        const container = document.querySelector('#lottie-container');
+
+        let inProgress = true
+
+        const animation = lottie.loadAnimation({
+            container: container,
+            renderer: 'svg',
+            loop: false,
+            autoplay: false,
+            path: '/assets/animation_lkjt130b.json',
+        });
+
+        animation.setSpeed(1000);
+
+        function startAnimation() {
+            animation.playSegments([1, 12], false)
+            animation.addEventListener('complete', () => {
+                animation.setSpeed(0.8);
+                if (inProgress) animation.playSegments([1, 12], false)
+            })
+        }
+        startAnimation()
+
+        function showSuccess() {
+            animation.setSpeed(1.2)
+            if (inProgress) animation.playSegments([13, 48], false)
+            inProgress = false
+        }
+
+        function showFailure() {
+            animation.setSpeed(1.2)
+            animation.setDirection(-1)
+            if (inProgress) animation.playSegments([12, 1], false)
+            inProgress = false
+        }
+        
+
+        const options = {
+            "key": '<%= razorpay_key %>',
+            "amount": '<%= order.totalAmount*100 %>',
+            "currency": "INR",
+            "name": "Bakestore",
+            "order_id": '<%= order.paymentData.id %>',
+            "handler": function (response) {
+
+                status.textContent = "Waiting for payment confirmation"
+                fetch("/orders/check-payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        razorpayOrderId: response.razorpay_order_id,
+                        razorpayPaymentId: response.razorpay_payment_id,
+                        secret: response.razorpay_signature
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showSuccess()
+                            status.textContent = "Success"
+                            setTimeout(() =>{
+                                window.location.href='/orderdetails/<%= order._id %>'
+                            },1000)
+                        } else {
+                            showFailure()
+                            status.textContent = "Oops! Looks like there is a problem with your payment"
+                        }
+                    })
+                    .catch(error => {
+                        showFailure()
+                        console.log("Error:", error)
+                        status.textContent = "Oops! Looks like there is a problem with your payment"
+                    })
+            },
+            "prefill": {
+                
+            },
+            "theme": {
+                "color": "#4D4DFF",
+            }
+        };
+
+        const rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            status.textContent = response.error.description
+        });
+        rzp1.open();
+    })
+
+
+</script>

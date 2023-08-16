@@ -1,0 +1,440 @@
+<%- include('../layouts/userheader.ejs') %>
+<div class="row">
+  <div class="col-75">
+    <div class="container">
+      
+
+        <div class="row1">
+          <div class="col-50">
+<section class="content-main">
+  <div class="content-header">
+      <div>
+          <h2 class="content-title card-title">Order detail</h2>
+          <p>Details for Order ID: <%= order._id %></p>
+      </div>
+  </div>
+  <div class="card">
+      <header class="card-header">
+          <div class="row align-items-center">
+              <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                  <span>
+                      <i class="material-icons md-calendar_today"></i> <b><%= new Date(order.createdAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })%>
+                      </b>
+                  </span> <br>
+                  <small class="text-muted">Order ID: <%= order._id %></small>
+              </div>
+              
+                  <input name="id" value="<%= order._id %>" hidden />
+                  <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                      <!-- <select name="status" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                          <option value="pending" <%= order.orderStatus === 'pending' ? 'selected' : '' %>>Pending</option>
+                          <option value="Cancelled" <%= order.orderStatus === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                          <option value="placed" <%= order.orderStatus === 'placed' ? 'selected' : '' %>>Placed</option>
+                          <option value="Delivered" <%= order.orderStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option> -->
+                          <!-- <option>Change status</option>
+                          <option>Awaiting payment</option>
+                          <option>Confirmed</option>
+                          <option>Shipped</option>
+                          <option>Delivered</option> -->
+                      <!-- </select> -->
+                      <% if(order.orderStatus === 'pending'||order.orderStatus === 'placed'){%>
+                      <a  href="/orderdetailspost/<%= order._id %>"><button class="cancel btn btn-primary" >Cancel Order</button></a>
+                      <%} else if(order.orderStatus === 'Delivered'){%>
+                        
+                      <button class="btn btn-primary"  onclick="invoiceGenerate('<%= order._id %>')" href="#">Download Invoice</button>
+                      <%}%>
+                      <!-- <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
+                  </div>
+              
+          </div>
+      </header> <!-- card-header end// -->
+                  
+      <div class="card-body">
+          <div class="row mb-50 mt-20 order-info-wrap">
+              <div class="col-md-4">
+                  <article class="icontext align-items-start">
+                      <span class="icon icon-sm rounded-circle bg-primary-light">
+                          <i class="text-primary material-icons md-person"></i>
+                      </span>
+                      <div class="text">
+                          <h6 class="mb-1">Customer:</h6>
+                          <p class="mb-1">
+                              <%= order.user.firstname %> <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template>  <%= order.user.phonenumber %>
+                          </p>
+                          <!-- <a href="#">View profile</a> -->
+                      </div>
+                  </article>
+              </div> <!-- col// -->
+              <!-- <div class="col-md-4">
+                  <article class="icontext align-items-start">
+                      <span class="icon icon-sm rounded-circle bg-primary-light">
+                          <i class="text-primary material-icons md-local_shipping"></i>
+                      </span>
+                      <div class="text">
+                          <h6 class="mb-1">Order info</h6>
+                          <p class="mb-1">
+                              Shipping: Fargo express <br> Pay method: card <br> Status: new
+                          </p>
+                          <a href="#">Download info</a>
+                      </div>
+                  </article>
+              </div> col// -->
+              <div class="col-md-4">
+                  
+              </div> 
+          </div> <!-- row // -->
+          <div class="row">
+              <div class="col-lg-7">
+                  <div class="table-responsive">
+                      <table class="table">
+                          <thead>
+                              <tr>
+                                  <th width="40%">Product</th>
+                                  <th width="20%">Unit Price</th>
+                                  <th width="20%">Quantity</th>
+                                  <th width="20%" class="text-end">Total</th>
+                              </tr>
+                          </thead>
+                          <% order.items.forEach(function(item) { %>
+                          <tbody>
+                              <tr>
+                                  <td>
+                                      <a class="itemside d-flex" href="#">
+                                          <div class="left">
+                                              <img src="/images/uploads/<%= item.productId.images[0] %>" width="40" height="40" class="img-xs" alt="Item">
+                                          </div>
+                                          <div class="info"> <%= item.productId.productname %> </div>
+                                      </a>
+                                  </td>
+                                  <td> <%= item.price %> </td>
+                                  <td> <%= item.quantity %> </td>
+                                  <td class="text-end"> <%= item.price %> </td>
+                              </tr>
+                              <% }) %>  
+                              
+                              
+                              <tr>
+                                  <td colspan="4">
+                                      <article class="float-end ">
+                                          <dl class="dlist d-flex">
+                                              <dt>Subtotal:</dt>
+                                              <dd>₹<%= order.totalAmount %></dd>
+                                          </dl>
+                                          <dl class="dlist d-flex">
+                                              <dt>Promo:</dt>
+                                              <dd>₹<%= order.discountAmount %></dd>
+                                          </dl>
+                                          <dl class="dlist d-flex">
+                                              <dt>Grand total:</dt>
+                                              <dd> <b class="h5">₹<%= order.finalPrice %></b> </dd>
+                                          </dl>
+                                          
+                                      </article>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div> <!-- table-responsive// -->
+              </div> <!-- col// -->
+              <div class="col-lg-1"></div>
+              <div class="col-lg-4">
+                  <div class="box shadow-sm bg-light">
+                      <h6 class="mb-15">Payment info</h6>
+                      <p class="text-capitalize">
+                          <%= order.paymentMode %>
+                          
+                      </p>
+                  </div>
+                  
+                  <article class="icontext align-items-start">
+                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                        <i class="text-primary material-icons md-place"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1">Deliver to:</h6>
+                        <p class="mb-1">
+                            <%= order.address.city %>, <%= order.address.state %><br><%= order.address.address %> <br> <%= order.address.pincode %>
+                        </p>
+                       
+                    </div>
+                </article>
+                <dl class="dlist d-flex">
+                  <dt class="text-muted">Status:</dt>
+                  <dd>
+                      <span class="badge rounded-pill alert-success text-success text-capitalize"><%= order.orderStatus %></span>
+                  </dd>
+              </dl>
+              
+                  <!-- <div class="h-25 pt-4">
+                      <div class="mb-3">
+                          <label>Notes</label>
+                          <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
+                      </div>
+                      <button class="btn btn-primary">Save note</button>
+                  </div> -->
+              </div> <!-- col// -->
+          </div>
+      </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+</section>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-75">
+    <div class="container">
+      
+
+        <div class="row1">
+          <div class="col-50">
+<h3>Thank For Your Order</h3>
+              <div class="border border-2 p-3">
+                <h4>Order Details</h4>
+                <p>OrderId:<%= order._id %> </p>
+                <strong><%= user.firstname %> <%= user.lastname %> &nbsp;&nbsp;&nbsp;  <%= user.phonenumber %> </strong></label>
+                <p>Amount:<%= order.totalAmount %></p>
+                
+                <p >Status:<%= order.orderStatus %></p>
+                <p>Payment Mode:<%= order.paymentMode %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div> -->
+
+<%- include('../layouts/footer.ejs') %>
+<style>
+  .coupon-container {
+      display: none; /* Hidden by default */
+    }
+    
+    .row1 {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+}
+
+.col-25 {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+}
+
+.col-50 {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+}
+
+.container1 {
+  background-color: #f2f2f2;
+  padding: 5px 20px 15px 20px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+}
+
+.btn1,.btncoupon,.btnorder {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.btn1:hover {
+  background-color: #45a049;
+}
+
+span.price,span.code,span.discountAmount {
+  float: right;
+  color: grey;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+@media (max-width: 800px) {
+  .row1 {
+    flex-direction: column-reverse;
+  }
+  .col-25 {
+    margin-bottom: 20px;
+  }
+} 
+</style>
+<script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
+<script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+<script>
+
+const orderList = JSON.parse('<%- JSON.stringify(order) %>');
+
+//   function setOrderid(index) {
+//     console.log(orderList[index].orderid);
+//     document.getElementById('orderid').value = orderList[index].orderid
+//     document.getElementById('orderidc').value =  orderList[index].orderid
+    
+//   }
+
+  
+
+  function invoiceGenerate(id) {
+    console.log(id);
+    let order = orderList
+    console.log(order)
+    let products = order.items
+//    console.log(order);
+   console.log(products,'sss');
+  
+
+    let invoiceProducts = [];
+    for (let i = 0; i < products.length; i++) {
+      invoiceProducts.push({
+        "quantity": products[i].quantity,
+        "description":products[i].productId.productname,
+        "tax-rate": 0,
+        "price": products[i].price
+      });
+    
+    }
+    var data = {
+      // Customize enables you to provide your own templates
+      // Please review the documentation for instructions and examples
+      "customize": {
+        //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+      },
+      "images": {
+        // The logo on top of your invoice
+        "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+        // The invoice background
+        "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+      },
+      // Your own data
+      "sender": {
+        "company": "Bakestore",
+        "address": "HighRoad Thrissur",
+        "zip": "680582",
+        "city": "Thrissur",
+        "country": "India"
+        //"custom1": "custom value 1",
+        //"custom2": "custom value 2",
+        //"custom3": "custom value 3"
+      },
+      // Your recipient
+      "client": {
+        "company": order.user.firstname,
+        "email": order.user.email,
+        "phone": order.user.phonenumber,
+        "address": order.address.address,
+        // "street": order.address.Street,
+        "city": order.address.city,
+        "zip": order.address.pincode,
+        "state": order.address.state,
+        // "country": order.address.state,
+        // "custom1": "custom value 1",
+        // "custom2": "custom value 2",
+        // "custom3": "custom value 3"
+      },
+      "information": {
+        // Invoice number
+        "number": order._id,
+        // Invoice data
+        "date": new Date(order.createdAt).toLocaleDateString(),
+        "due-date":0
+      },
+      // The products you would like to see on your invoice
+      // Total values are being calculated automatically
+      "products":invoiceProducts,
+      // The message you would like to display on the bottom of your invoice
+      "bottom-notice": "Thanks for purchasing from us..",
+
+      // Settings to customize your invoice
+      "settings": {
+        "currency": "INR"
+        // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
+        // "margin-top": 25, // Defaults to '25'
+        // "margin-right": 25, // Defaults to '25'
+        // "margin-left": 25, // Defaults to '25'
+        // "margin-bottom": 25, // Defaults to '25'
+        // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // "height": "1000px", // allowed units: mm, cm, in, px
+        // "width": "500px", // allowed units: mm, cm, in, px
+        // "orientation": "landscape", // portrait or landscape, defaults to portrait
+      },
+      // Translate your invoice to your preferred language
+      "translate": {
+        // "invoice": "FACTUUR",  // Default to 'INVOICE'
+        // "number": "Nummer", // Defaults to 'Number'
+        // "date": "Datum", // Default to 'Date'
+        // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+        // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+        // "products": "Producten", // Defaults to 'Products'
+        // "quantity": "Aantal", // Default to 'Quantity'
+        // "price": "Prijs", // Defaults to 'Price'
+        // "product-total": "Totaal", // Defaults to 'Total'
+        // "total": "Totaal", // Defaults to 'Total'
+        // "vat": "btw" // Defaults to 'vat'
+      },
+    };
+
+    // Create your invoice! Easy!
+
+    easyinvoice.createInvoice(data, function (result) {
+      // The response will contain a base64 encoded PDF file
+      console.log('PDF base64 string: ', result.pdf);
+      var base64Data = result.pdf;
+
+
+      //Convert the base64 data to a Blob object
+      var byteCharacters = atob(base64Data);
+      var byteNumbers = new Array(byteCharacters.length);
+      for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      var byteArray = new Uint8Array(byteNumbers);
+      var blob = new Blob([byteArray], { type: 'application/pdf' });
+
+      // Create a temporary download link and trigger the download
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'invoice.pdf';
+      link.click();
+    });
+  }
+</script>

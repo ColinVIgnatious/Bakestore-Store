@@ -1,0 +1,99 @@
+<%- include('../layouts/adminheader.ejs') %>
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-lg-9 col-xl-7">
+          <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add Category</h3>
+              <form id="categoryForm" action="/admin/addcategory" method="POST" enctype="multipart/form-data">
+  
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+  
+                    <div class="form-outline">
+                      <label class="form-label" for="productCategory">Product Category</label>
+                      <input type="text" id="productCategory" class="form-control form-control-lg" name="productCategory" />
+                      
+                    </div>
+  
+                  </div>
+                  <div class="col-md-6 mb-4">
+  
+                    <div class="form-outline">
+                      <label class="form-label" for="catdescription">Category Description</label>
+                      <input type="text" id="catdescription" class="form-control form-control-lg" name="catdescription"/>
+                      
+                    </div>
+  
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <div class="col-md-6 mb-4 d-flex align-items-center">
+                    <div class="col-md-6 mb-4 pb-2">
+                      <div class="form-outline">
+                        <label class="form-label" for="addimage">Add images</label>
+                        <input type="file" name="images" multiple />
+                      </div>
+                    </div>  
+                    
+  
+                  </div>
+                  <div class="mt-4 pt-2">
+                    <button class="btn btn-primary btn-lg" type="submit">ADD CATEGORY</button>
+                  </div>
+    
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <%- include('../layouts/adminfooter.ejs') %>
+                  
+    <script>
+      const categoryForm = document.getElementById('categoryForm');
+      const productCategoryInput = document.getElementById('productCategory');
+      const catDescriptionInput = document.getElementById('catdescription');
+      const imagesInput = document.querySelector('input[type="file"]');
+      const submitButton = document.querySelector('button[type="submit"]');
+  
+      categoryForm.addEventListener('submit', function (event) {
+          let isValid = true;
+  
+          // Reset previous error messages
+          productCategoryInput.classList.remove('is-invalid');
+          catDescriptionInput.classList.remove('is-invalid');
+          imagesInput.classList.remove('is-invalid');
+  
+          // Perform validation for each field
+          if (productCategoryInput.value.trim() === '') {
+              isValid = false;
+              productCategoryInput.classList.add('is-invalid');
+          }
+  
+          if (catDescriptionInput.value.trim() === '') {
+              isValid = false;
+              catDescriptionInput.classList.add('is-invalid');
+          }
+  
+          if (imagesInput.files.length === 0) {
+              isValid = false;
+              imagesInput.classList.add('is-invalid');
+          }
+  
+          if (!isValid) {
+              event.preventDefault(); // Prevent form submission if validation fails
+          }
+      });
+  </script>
+  
+  
+  
+                  
+  
+                
+  

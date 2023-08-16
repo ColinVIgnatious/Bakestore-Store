@@ -1,0 +1,141 @@
+<%- include('../layouts/adminheader.ejs') %>
+<section class="content-main">
+  <div class="content-header">
+      <div>
+          <h2 class="content-title card-title">Products List</h2>
+          <!-- <p>Lorem ipsum dolor sit amet.</p> -->
+      </div>
+      <div>
+          <!-- <a href="#" class="btn btn-light rounded font-md">Export</a>
+          <a href="#" class="btn btn-light rounded  font-md">Import</a> -->
+          <a href="/admin/addproduct" class="btn btn-primary btn-sm rounded" >Create new</a>
+      </div>
+  </div>
+  <div class="card mb-4">
+      <!-- <header class="card-header">
+          <div class="row align-items-center"> -->
+              <!-- <div class="col col-check flex-grow-0">
+                  <div class="form-check ms-2">
+                      <input class="form-check-input" type="checkbox" value="">
+                  </div>
+              </div> -->
+              <!-- <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                  <select class="form-select">
+                      <option selected>All category</option>
+                      <option>Electronics</option>
+                      <option>Clothes</option>
+                      <option>Automobile</option>
+                  </select>
+              </div> -->
+              <!-- <div class="col-md-2 col-6">
+                  <input type="date" value="02.05.2021" class="form-control">
+              </div> -->
+              <!-- <div class="col-md-2 col-6">
+                  <select class="form-select">
+                      <option selected>Status</option>
+                      <option>Listed</option>
+                      <option>Delisted</option>
+                      
+                  </select>
+              </div>
+          </div> -->
+      <!-- </header> card-header end// -->
+    
+      <div class="card-body">
+
+        <% data.forEach(function(item) { %>
+          <article class="itemlist">
+              <div class="row align-items-center">
+                  <!-- <div class="col col-check flex-grow-0">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox">
+                      </div>
+                  </div> -->
+                  <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                      <a class="itemside" href="#">
+                          <div class="left">
+                              <img src="/images/uploads/<%= item.images[0] %>" class="img-sm img-thumbnail" alt="Item">
+                          </div>
+                          <div class="info">
+                              <h6 class="mb-0"><%= item.productname %></h6>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="col-lg-1 col-sm-2 col-4 col-date">
+                    <span><%= item.productCategory.productCategory %></span>
+                </div>
+
+                  <div class="col-lg-2 col-sm-2 col-4 col-price"><span>₹</span><span><%= item.price %></span></div>
+                  <div class="col-lg-2 col-sm-2 col-4 col-status">
+                      <span class="badge rounded-pill alert-success"><%= item.status %></span>
+                  </div>
+                
+                  <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                      <a href="/admin/product/edit?_id=<%= item._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                          <i class="material-icons md-edit"></i> Edit
+                      </a>
+                      <!-- <a href="#" class="btn btn-sm font-sm btn-light rounded">
+                          <i class="material-icons md-delete_forever"></i> Delete
+                      </a> -->
+                  </div>
+              </div> <!-- row .// -->
+          </article> <!-- itemlist  .// -->
+          <% }); %>
+      </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+  <div class="pagination-area mt-30 mb-50">
+      <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-start">
+            <% for(let i=1; i<= totalPages;i++) { %>
+              <% if(i===currentPage){ %>
+                  <li class="page-item active"><a class="page-link" href="#"><%= i %></a></li>
+              <% } else { %>
+              <li class="page-item"><a class="page-link" href="/admin/productlist?page=<%= i %>"><%= i %></a></li>
+              <% } %>
+          <% } %>
+          </ul>
+      </nav>
+  </div>
+</section>
+<!-- <table class="table mt-20">
+  <thead>
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Product Category</th>
+      <th scope="col">Product Description</th>
+      <th scope="col">Status</th>
+      <th scope="col">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% data.forEach(function(item) { %>
+      <tr>
+        <td><%= item.productname %></td>
+        <td><%= item.productCategory.productCategory %></td>
+        <td><%= item.description %></td>
+        <td><%= item.status %></td>
+        <td>
+          <% if (item.images && item.images.length > 0) { %>
+            <img src="/images/uploads/<%= item.images[0] %>" height="50px" />
+          <% } else { %> -->
+            <!-- Show a placeholder image or any other content when images array is null or empty -->
+            <!-- <img src="/images/placeholder-image.png" height="50px" />
+          <% } %>
+        </td> -->
+        
+        <!-- <td><img src="/images/uploads/<%= item.images[0] %>" height="50px" /></td> -->
+        <!-- <td>
+          <a href="/admin/product/edit?_id=<%= item._id %>">
+            <button class="btn btn-primary">Edit</button>
+          </a>
+        </td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
+<a href="/admin/addproduct">
+  <button class="btn btn-outline-light btn-lg px-5" style="background-color: orange;" type="submit">Add Product</button>
+</a> -->
+
+<%- include('../layouts/adminfooter.ejs') %>
+

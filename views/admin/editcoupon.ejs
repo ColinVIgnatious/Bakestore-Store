@@ -1,0 +1,140 @@
+<%- include('../layouts/adminheader.ejs') %>
+<section class=" gradient-custom">
+  <div class="content-header">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div
+          class="card shadow-2-strong card-registration"
+          style="border-radius: 15px"
+        >
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add Coupons</h3>
+            <form action="/admin/editcoupon" method="POST">
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                    <input name="id" value="<%= coupon._id %>" hidden />
+                  <div class="form-outline">
+                    <label class="form-label" for="code">Enter PromoCode</label>
+                    <input
+                      type="text"
+                      id="code"
+                      class="form-control form-control-lg"
+                      name="code"
+                      value="<%= coupon.code %>"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label" for="discountType"
+                      >Choose Discount Type</label
+                    >
+                    <div class="col-12">
+                      <select class="select form-control-lg" name="discountType">
+                        
+                        <option value="Percentage" <%= coupon.discountType === 'Percentage' ? 'selected' : '' %> >Percentage Amount</option>
+                        <option value="Fixed" <%= coupon.discountType === 'Fixed' ? 'selected' : '' %> >Fixed Amount</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center"></div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="description"
+                      >Code Description</label
+                    >
+                    <input
+                      type="text"
+                      id="description"
+                      class="form-control form-control-lg"
+                      name="description"
+                      value="<%= coupon.description %>"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="discountAmount"
+                      >Discount Amount</label
+                    >
+                    <input
+                      type="number"
+                      id="discountAmount"
+                      class="form-control form-control-lg"
+                      name="discountAmount"
+                      value="<%= coupon.discountAmount %>"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="minimumAmount"
+                      >Minimum Amount</label
+                    >
+                    <input
+                      type="number"
+                      id="minimumAmount"
+                      name="minimumAmount"
+                      class="form-control form-control-lg"
+                      value="<%= coupon.minimumAmount %>"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="maxRedemptions"
+                      >Maximum Redemptions</label
+                    >
+                    <input
+                      type="number"
+                      id="maxRedemptions"
+                      name="maxRedemptions"
+                      class="form-control form-control-lg"
+                      value="<%= coupon.maxRedemptions %>"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="expirationDate"
+                      >Expiration Date</label
+                    >
+                    <input
+                    type="datetime-local"
+                      id="expirationDate"
+                      name="expirationDate"
+                      class="form-control form-control-lg"
+                      value="<%= coupon.expirationDate.toISOString().slice(0, 16) %>"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2">
+                <button class="btn btn-primary btn-lg" type="submit">
+                  UPDATE COUPON
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<%- include('../layouts/adminfooter.ejs') %>

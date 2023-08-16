@@ -1,0 +1,128 @@
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div
+          class="card shadow-2-strong card-registration"
+          style="border-radius: 15px"
+        >
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Sign Up Form</h3>
+            <form action="/verifyotp" method="POST" id="otpform">
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label" for="firstName">First Name</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      class="form-control form-control-lg"
+                      name="firstname"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label" for="lastName">Last Name</label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      class="form-control form-control-lg"
+                      name="lastname"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="emailAddress">Email</label>
+                    <input
+                      type="email"
+                      id="emailAddress"
+                      class="form-control form-control-lg"
+                      name="email"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="phoneNumber"
+                      >Phone Number</label
+                    >
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      class="form-control form-control-lg"
+                      oninput="validateNumber(event)"
+                      name="phonenumber"
+                      pattern="[0-9]{10}"
+                      maxlength="10"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="password"
+                      >Enter password</label
+                    >
+                    <input
+                      type="text"
+                      id="password"
+                      name="password"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+                  <div class="form-outline">
+                    <label class="form-label" for="confirmpassword"
+                      >Re-enter password</label
+                    >
+                    <input
+                      type="text"
+                      id="confirmpassword"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mt-4 pt-2">
+                  <button class="btn btn-primary btn-lg" id="sendOtp">
+                    SEND OTP
+                  </button>
+                </div>
+                <div class="col-md-6 mt-4 pt-2">
+                  <div class="form-outline form-white mb-4">
+                    <input
+                      type="text"
+                      id="typeOtpX"
+                      class="form-control form-control-lg"
+                      placeholder="Enter the OTP"
+                      name="otp"
+                    />
+                    <span id="otpError" style="color: red"></span>
+                  </div>
+                </div>
+                <div class="mt-4 pt-2">
+                  <button
+                    class="btn btn-primary btn-lg"
+                    id="verifyOtp"
+                    type="submit"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="javascripts/otpvalidation.js"></script>
