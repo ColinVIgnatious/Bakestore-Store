@@ -117,7 +117,9 @@ module.exports = {
 
   addcategory: async (req, res) => {
     try {
-      res.render("admin/addcategory");
+      const errorMessage = req.query.errorMessage || null; // Get the error message from query parameters
+    res.render("admin/addcategory", { errorMessage });
+     
     } catch (error) {
       console.log(error.message);
     }
@@ -129,7 +131,7 @@ module.exports = {
       productCategory: productCategory,
       catdescription: catdescription,
     };
-    // let category = req.body;
+    
     data.images = [];
     console.log(req.files)
     if (req.files.length > 0) {
@@ -151,7 +153,10 @@ module.exports = {
       // Check if the category already exists
       const existingCategory = await categorylist.findOne({ productCategory });
       if (existingCategory) {
-        return res.status(400).json({ message: "Category already exists" });
+        const category = await categorylist.find(); // Fetch all categories for the view
+        const errorMessage = "Category already exists"; // Set the error message
+        return res.render("admin/addcategory", { category, errorMessage });
+        
       }
 
       // Save the new category to the database
@@ -160,7 +165,7 @@ module.exports = {
         const allCategories = await categorylist.find(); // Fetch all categories from the database
         res.redirect("/admin/categorylist");
       }
-      // res.status(201).json({ message: 'Category added successfully' });
+      
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Internal server error" });
@@ -417,28 +422,6 @@ module.exports = {
               console.log(error.message);
             }
           },
-               
-      // salesreport: async (req, res) => {
-       
-          
-      //       let { from, to } = req.query
-      //       if (!from || !to) {
-      //         return res.render('admin/salesreport',{orders:[],from:'',to:'' })
-      //       }
-      //       if (from > to) [from, to] = [to, from]
-      //       to += 'T23:59:59.999Z'
-      //       try {
-      //         const orders = await orderlist.find({ createdAt: { $gte: from, $lte: to }, orderStatus: 'Delivered' }).populate('user')
-             
-      //   console.log(orders)
-      //         from = from.split('T')[0]
-      //         to = to.split('T')[0]
-      //         res.render('admin/salesreport', { orders, from, to })
-      //       } catch (error) {
-      //         next(error)
-      //       }
-          
-      //   },
 
         salesreport: async (req, res, next) => {
 
@@ -812,7 +795,7 @@ module.exports = {
         const skipItems=(page-1) * ITEMS_PER_PAGE
         const totalCount=await orderlist.countDocuments()
         const totalPages=Math.ceil(totalCount/ITEMS_PER_PAGE)
-        const banner = await bannerlist.find().skip(skipItems)
+        const banner = await bannerlist.find().sort({createdAt:-1}).skip(skipItems)
         .limit(ITEMS_PER_PAGE)
         if (banner) res.render("admin/bannerlist", { data: banner , currentPage:page, totalPages:totalPages});
       } catch (error) {
@@ -831,7 +814,7 @@ module.exports = {
     },
   
     addbannerpost: async (req, res) => {
-      const { bannername } = req.body;
+      const { bannername,bannerurl } = req.body;
       let images = req.file.filename
               let imageName = `cropped_${images}`;
         await sharp(`./public/images/uploads/${images}`)
@@ -840,7 +823,7 @@ module.exports = {
         images=imageName  
       try {
         
-        const banner = await bannerlist.create({bannername,images});
+        const banner = await bannerlist.create({bannername,bannerurl,images});
         if (banner) {
           const allBanners = await bannerlist.find(); 
           res.redirect("/admin/bannerlist");
@@ -863,8 +846,8 @@ module.exports = {
     },
   
     editbannerpost: async (req, res) => {
-      try {const { bannername,_id } = req.body;
-      const data = {bannername}
+      try {const { bannername,_id,bannerurl } = req.body;
+      const data = {bannername,bannerurl}
       if(req.file && req.file.filename){
       let images = req.file.filename
       console.log(req.file)

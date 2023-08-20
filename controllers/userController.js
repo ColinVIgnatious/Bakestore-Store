@@ -522,19 +522,7 @@ module.exports = {
       const user = await usermodel.findById(userId);
       const order = await orderlist.findById(orderId).populate("items.productId user");
       console.log(order)
-      // const orderlists = JSON.stringify(order)
-      // const order = await orderlist.findById(orderId)
-
-//  if (order.length>0) {
-//        let orderDetails = order.map(ord => {
-// return {
-                   
-//                     status: ord.orderStatus,
-                    
-// }
-// })
-//  }
-      res.render("users/orderdetails", { order, user, category });
+          res.render("users/orderdetails", { order, user, category });
     } catch (error) {
       console.log(error.message);
     }
@@ -547,7 +535,8 @@ module.exports = {
       const user = await usermodel.findById(userId);
       const order = await orderlist
         .find({ user: userId })
-        .populate("items.productId");
+        .populate("items.productId")
+        .sort({createdAt:-1});
       res.render("users/orderlist", { order, user, category });
     } catch (error) {
       console.log(error.message);
@@ -597,9 +586,11 @@ module.exports = {
     try {
       const totalAmountInCart = req.query.total;
       console.log(totalAmountInCart);
+      const currentDate = new Date();
       const category = await categorylist.find();
       const coupons = await couponlist.find({
         minimumAmount: { $lt: totalAmountInCart },
+        expirationDate: { $gt: currentDate },
       });
       console.log(coupons);
       res.render("users/coupon", { coupons, category });
